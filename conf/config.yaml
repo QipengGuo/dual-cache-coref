@@ -1,0 +1,45 @@
+metrics: ['MUC', 'Bcub', 'CEAFE']
+keep_singletons: True
+seed: 42
+train: True
+use_wandb: False
+
+# Override encoder can be used during evaluation to override the encoder used during training
+# Sample use:
+# python main.py experiment=eval_all paths.model_dir=../models/ontonotes_best/
+#  model/doc_encoder/transformer=longformer_ontonotes override_encoder=True
+# Here we override the longformer_large encoder with longformer_ontonotes encoder uploaded on Huggingface
+override_encoder: False
+
+# USeful for testing models with different memory architecture than the one trained on
+override_memory: False
+
+defaults:
+  - _self_
+  - datasets: litbank
+  - model: model
+  - optimizer: adam
+  - trainer: train
+  - infra: local
+
+  - experiment: debug
+
+new_max_ent: 50 # ignored
+new_eval_ent: 300 # ignored
+run_num: 0
+cache_mode: '20_20' # 'lru size _ lfu size'
+
+paths:
+  resource_dir: ${infra.work_dir}/../coref_resources
+  base_data_dir: ${paths.resource_dir}/data
+  conll_scorer: ${paths.resource_dir}/reference-coreference-scorers/scorer.pl
+  base_model_dir: ${infra.work_dir}/../models
+  model_dir: null
+  best_model_dir: null
+  model_filename: 'model.pth'
+  model_name: null
+  model_name_prefix: 'coref_'
+  model_path: null
+  best_model_path: null
+  doc_encoder_dirname: 'doc_encoder'
+
